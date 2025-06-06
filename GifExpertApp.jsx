@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { AddCategory } from "./Components/AddCategory";
+import { GifGrid } from "./Components/GifGrid";
 
 export const GifExpertApp = () => {
 /* Cuando quiero almacenar información y esa información tiene
@@ -12,31 +13,54 @@ es en un Hook para mantener el estado como el useState
         const [ categories, setcategories] = useState(['One Punch','Dragon Ball'])
 }
 */
-    const [ categories, setcategories] = useState(['One Punch','Dragon Ball'])
+    const [ categories, setcategories] = useState(['One Punch'])
     
-    const onAddCategory = () =>{
+    const onAddCategory = (newCategory) =>{
         //Valorant
-        setcategories([...categories, 'Valorant']);
+        if (categories.includes(newCategory)) return;
+
+        setcategories([newCategory, ...categories]);
         //setcategories(cat =>[...cat, 'Valorant']) otra forma de 
         //hacerlo.
     }
-    console.log(categories);
+
+    
+
+    const removeCategory = (category) =>{
+
+        //
+        setcategories(categories.filter((_, names) =>  names!== category));
+        
+        
+        
+
+    }
+    
     return (
         <>
-            {/*titulo*/}
+            
             <h1>GifExpertApp</h1>
 
-            {/* input */}
-            <AddCategory/>
-            {/*Listado de Gif */}
-            <button onClick={onAddCategory}>Agregar</button>
-            <ol>
+            
+                <AddCategory 
+                //enviar una propiedad
+                onNewCategory={ (value) => onAddCategory(value) }
+                />
                 {
-                categories.map(category =>{
-                    return <li key= { category }> { category } </li>
-                })}
+                    categories.map( (category ) =>(                        
+                        <GifGrid 
+                            key={category}
+                            category={category} 
+                            remove = {(category) => removeCategory(category)}
+                            />
+                        
+                        ))
                 
-            </ol>
+                
+                }
+            
+
+
                 {/* Gif Item */}
         </>
     )
